@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DigSite · Gesture Archaeology</title>
+  <link rel="stylesheet" href="style.css?v=9" />
+</head>
+<body>
+  <!-- Full-screen stop-motion stage -->
+  <img id="stage" alt="" />
+
+  <!-- Intro: future archaeologist -->
+  <section class="intro" id="intro">
+    <div class="intro__frame" id="introFrame">
+      <canvas class="intro__result hidden" id="introResult" width="335" height="410"></canvas>
+      <div class="intro__capture" id="introCapture">
+        <video id="introCam" autoplay playsinline muted></video>
+        <div class="intro__guide" aria-hidden="true"></div>
+        <p class="intro__hint">Line your face up in the oval, then freeze it</p>
+        <button class="intro__snap" id="snapBtn">📸 Freeze my face</button>
+      </div>
+      <div class="intro__tools hidden" id="introTools">
+        <button class="intro__tool" id="retakeBtn">↺ Retake</button>
+        <label class="intro__size" for="faceSize">Size
+          <input type="range" id="faceSize" min="50" max="220" value="100" step="1" />
+        </label>
+        <span class="intro__drag-hint">drag to fit a face</span>
+      </div>
+    </div>
+    <div class="intro__body">
+      <p class="intro__eyebrow">DigSite · Archaeology</p>
+      <h1 class="intro__title">Future<br />Archaeologist</h1>
+      <p class="intro__sub">You are a future archaeologist — you have just discovered an ancient relic.</p>
+      <p class="intro__desc">Sweep the dirt off with an open palm, then make a fist to detect what lies beneath. Every part of this relic tells a story about its past, and about the future it came from.</p>
+      <button class="intro__start" id="startBtn">▶ Start</button>
+    </div>
+  </section>
+
+  <!-- Top status bar -->
+  <header class="hud">
+    <div class="brand">DIG<span>SITE</span></div>
+    <div class="status">
+      <span class="status-dot idle" id="statusDot"></span>
+      <span class="status-text" id="statusText">Loading…</span>
+    </div>
+    <button class="btn-restart" id="restartBtn" title="Restart">↻ Restart</button>
+  </header>
+
+  <!-- Prompt banner -->
+  <div class="prompt hidden" id="prompt" aria-live="polite">
+    <div class="prompt__icon" id="promptIcon">✋</div>
+    <h1 class="prompt__title" id="promptTitle"></h1>
+    <p class="prompt__sub" id="promptSub"></p>
+  </div>
+
+  <!-- Camera preview -->
+  <aside class="camera" id="cameraBox">
+    <video id="webcam" playsinline muted></video>
+    <canvas id="overlay" width="640" height="480"></canvas>
+    <div class="camera__note" id="camNote">Waiting for camera…</div>
+  </aside>
+
+  <!-- Playback controls -->
+  <div class="controls" id="controls">
+    <button class="ctrl-btn" id="playPauseBtn" title="Pause / resume">⏸</button>
+    <label class="ctrl-speed" for="speed">
+      <span class="ctrl-speed__label">Speed</span>
+      <input type="range" id="speed" min="1" max="30" value="6" step="1" />
+      <output class="ctrl-speed__value" id="speedValue">6</output>
+      <span class="ctrl-speed__unit">fps</span>
+    </label>
+  </div>
+
+  <!-- Final page: exploded view (appears after fist detection; unfold with an open palm) -->
+  <div class="select hidden" id="selectPanel">
+    <h2 class="select__title" id="selectTitle">Open your palm to unfold the relic</h2>
+    <p class="select__hint hidden" id="selectHint"></p>
+    <div class="explode" id="explodeView">
+      <!-- Part info bubble: pops up after dragging a part out with a pinch -->
+      <aside class="explode__info hidden" id="explodeInfo">
+        <button class="explode__info-close" id="infoClose" aria-label="Close">✕</button>
+        <h3 class="explode__info-name" id="infoName"></h3>
+        <p class="explode__info-sub" id="infoSub"></p>
+        <p class="explode__info-desc" id="infoDesc"></p>
+        <p class="explode__info-source" id="infoSource"></p>
+        <button class="explode__info-ask" id="askBtn">Hear the future archaeologist's guess</button>
+        <p class="explode__info-model" id="modelOutput"></p>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Ending: disposition choice -> one sentence -> archive card -->
+  <section class="ending hidden" id="endingPanel">
+    <div class="ending__stage" id="endingChoices">
+      <div class="ending__head">
+        <p class="ending__eyebrow">The relic is whole again</p>
+        <h2 class="ending__title">You have uncovered its past.<br />What should happen next?</h2>
+      </div>
+      <div class="ending__choices">
+        <button class="ending__choice" data-choice="repair">
+          <span class="ending__choice-icon">🔧</span>
+          <span class="ending__choice-name">Repair &amp; Reuse</span>
+          <span class="ending__choice-sub">Parts reassemble and the screen faintly lights up</span>
+        </button>
+        <button class="ending__choice" data-choice="recover">
+          <span class="ending__choice-icon">♻️</span>
+          <span class="ending__choice-name">Recover Materials</span>
+          <span class="ending__choice-sub">Parts move into the material collection bins</span>
+        </button>
+        <button class="ending__choice" data-choice="preserve">
+          <span class="ending__choice-icon">🏛️</span>
+          <span class="ending__choice-name">Preserve as an Artefact</span>
+          <span class="ending__choice-sub">An archive label appears beside it</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="ending__ask hidden" id="endingAsk">
+      <div class="ending__ask-inner">
+        <p class="ending__ask-q">What would you like the future to remember about this object?</p>
+        <div class="ending__ask-row">
+          <input type="text" id="memoryInput" maxlength="140" placeholder="Write one sentence…" autocomplete="off" />
+          <button class="ending__submit" id="memorySubmit">Generate card</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recover materials: four bins -->
+    <div class="ending__bins hidden" id="endingBins" aria-hidden="true">
+      <div class="ending__bin" data-bin="0"><span class="ending__bin-dot"></span>Glass</div>
+      <div class="ending__bin" data-bin="1"><span class="ending__bin-dot"></span>Silicon</div>
+      <div class="ending__bin" data-bin="2"><span class="ending__bin-dot"></span>Battery</div>
+      <div class="ending__bin" data-bin="3"><span class="ending__bin-dot"></span>Aluminium</div>
+    </div>
+
+    <!-- Preserve as artefact: archive label -->
+    <div class="ending__label hidden" id="preserveLabel">
+      <span class="ending__label-tag">Accession</span>
+      <span class="ending__label-no">No. 2026-047</span>
+      <span class="ending__label-title">Smartwatch Relic</span>
+    </div>
+
+    <!-- Final archive card -->
+    <div class="archive hidden" id="archiveCard"></div>
+  </section>
+
+  <!-- Local MediaPipe (works offline) -->
+  <script src="vendor/mediapipe/vision_bundle.js"></script>
+  <script src="script.js?v=14"></script>
+</body>
+</html>

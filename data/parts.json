@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Screen",
+    "subtitle": "The Work Behind Repair",
+    "fact": "In its 2020 Apple Watch Series 6 teardown, iFixit found that replacing the screen was difficult but possible. Its tiny tri-point screws are easy to remove but hard to keep track of.",
+    "source": "iFixit (2020), Apple Watch Series 6 Teardown, Final Thoughts",
+    "url": "https://www.ifixit.com/Teardown/Apple+Watch+Series+6+Teardown/136694"
+  },
+  {
+    "name": "Circuit Board",
+    "subtitle": "Emissions Before Use",
+    "fact": "Apple's 2020 report estimates a lifetime carbon footprint of 36 kg CO₂e for the US configuration of the Apple Watch Series 6 with a 44 mm aluminium case and Sport Band. Production accounts for 78% of that total.",
+    "source": "Apple (2020), Apple Watch Series 6 Product Environmental Report",
+    "url": "https://www.apple.com/environment/pdf/products/watch/Apple_Watch_Series6_PER_sept2020.pdf"
+  },
+  {
+    "name": "Battery",
+    "subtitle": "A Limited Lifetime",
+    "fact": "The battery is designed to keep up to 80% of its original capacity after 1,000 complete charge cycles. Its lifespan varies with use and device settings.",
+    "source": "Apple, Batteries — Service and Recycling",
+    "url": "https://www.apple.com/uk/batteries/service-and-recycling/"
+  },
+  {
+    "name": "Case",
+    "subtitle": "What Remains After Disposal",
+    "fact": "The Global E-waste Monitor 2024 reports that the world generated 62 million tonnes of electronic waste in 2022. Only 22.3% by mass was documented as formally collected and recycled.",
+    "source": "ITU and UNITAR (2024), The Global E-waste Monitor 2024",
+    "url": "https://www.itu.int/en/ITU-D/Environment/Pages/Publications/The-Global-E-waste-Monitor-2024.aspx"
+  }
+]

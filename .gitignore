@@ -1,0 +1,19 @@
+# Secrets — never commit
+.env
+
+# Dependencies / build artifacts
+node_modules/
+__pycache__/
+*.pyc
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Office lock files
+~$*
+
+# Stray local files (not part of the site)
+/1
+/c
